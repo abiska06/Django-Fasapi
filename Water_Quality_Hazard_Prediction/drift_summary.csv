@@ -1,0 +1,9 @@
+feature,score,threshold,drifted
+temp_mean,0.3905,0.1,True
+conductance_mean,0.3506,0.1,True
+do_mean,0.3356,0.1,True
+ph_max,0.1483,0.1,True
+do_max,0.1101,0.1,True
+conductance_max,0.1065,0.1,True
+conductance_min,0.083,0.1,False
+ph_min,0.0555,0.1,False

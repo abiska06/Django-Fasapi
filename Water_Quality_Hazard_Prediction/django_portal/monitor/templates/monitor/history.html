@@ -1,0 +1,41 @@
+{% extends "monitor/base.html" %}
+
+{% block title %}History — SentinelFlow{% endblock %}
+
+{% block content %}
+<h1>Prediction history</h1>
+<p class="lede">Every reading submitted through this portal, most recent first. Stored by Django; the FastAPI service itself keeps no state.</p>
+
+{% if records %}
+<table class="history">
+    <thead>
+        <tr>
+            <th>Submitted</th>
+            <th>Site</th>
+            <th>Predicted pH</th>
+            <th>Hazard probability</th>
+            <th>Verdict</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for record in records %}
+        <tr>
+            <td>{{ record.created_at|date:"Y-m-d H:i" }}</td>
+            <td>{{ record.site_label|default:"—" }}</td>
+            <td>{{ record.predicted_ph|floatformat:4 }}</td>
+            <td>{{ record.hazard_probability|floatformat:2 }}</td>
+            <td>
+                {% if record.is_hazard %}
+                    <span class="tag tag-hazard">Hazard</span>
+                {% else %}
+                    <span class="tag tag-safe">Safe</span>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+    <p class="empty-note">No predictions submitted yet. <a href="{% url 'monitor:predict' %}">Submit the first reading.</a></p>
+{% endif %}
+{% endblock %}

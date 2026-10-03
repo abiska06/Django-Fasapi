@@ -1,0 +1,108 @@
+{% extends "monitor/base.html" %}
+
+{% block title %}New reading — SentinelFlow{% endblock %}
+
+{% block content %}
+<h1>Submit a sensor reading</h1>
+<p class="lede">
+    Enter a normalized daily reading from a monitoring site. Django validates
+    the form, then calls the FastAPI hazard-prediction microservice
+    asynchronously — the pH regressor and hazard classifier never run inside
+    this web process.
+</p>
+
+{% if result %}
+    <div class="result-card {% if result.is_hazard %}hazard{% endif %}">
+        <p class="verdict">
+            {% if result.is_hazard %}&#9888; Hazard flagged{% else %}&#10003; Within safe range{% endif %}
+        </p>
+        <p>
+            Predicted next-day pH (normalized):
+            <strong>{{ result.predicted_ph|floatformat:4 }}</strong>
+        </p>
+        <div class="result-grid">
+            <div class="stat">
+                <div class="stat-label">Hazard probability</div>
+                <div class="stat-value">{{ result.hazard_probability|floatformat:2 }}</div>
+            </div>
+            <div class="stat">
+                <div class="stat-label">Safe band (normalized pH)</div>
+                <div class="stat-value">
+                    {{ result.hazard_bounds_normalized_pH.lower|floatformat:3 }}
+                    &ndash;
+                    {{ result.hazard_bounds_normalized_pH.upper|floatformat:3 }}
+                </div>
+            </div>
+        </div>
+        <p class="lede" style="margin-top:18px; margin-bottom:0;">
+            Recall on the hazard classifier is 0.62 on the held-out test set —
+            roughly 1 in 3 true hazard days can be missed. Treat "within safe
+            range" as informative, not a guarantee.
+        </p>
+    </div>
+{% endif %}
+
+<form method="post" class="panel">
+    {% csrf_token %}
+
+    <div class="field-group">
+        <div class="field-grid">
+            <div class="field">
+                <label for="{{ form.site_label.id_for_label }}">{{ form.site_label.label }}</label>
+                {{ form.site_label }}
+                {{ form.site_label.errors }}
+            </div>
+        </div>
+    </div>
+
+    <fieldset class="field-group">
+        <legend>Specific conductance</legend>
+        <div class="field-grid">
+            {% for field in form %}
+                {% if "conductance" in field.name %}
+                    <div class="field">
+                        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                        {{ field }}
+                        <span class="help">{{ field.help_text }}</span>
+                        {{ field.errors }}
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </fieldset>
+
+    <fieldset class="field-group">
+        <legend>pH</legend>
+        <div class="field-grid">
+            {% for field in form %}
+                {% if field.name == "ph_max" or field.name == "ph_min" %}
+                    <div class="field">
+                        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                        {{ field }}
+                        <span class="help">{{ field.help_text }}</span>
+                        {{ field.errors }}
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </fieldset>
+
+    <fieldset class="field-group">
+        <legend>Dissolved oxygen &amp; temperature</legend>
+        <div class="field-grid">
+            {% for field in form %}
+                {% if field.name == "do_max" or field.name == "do_mean" or field.name == "temp_mean" %}
+                    <div class="field">
+                        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                        {{ field }}
+                        <span class="help">{{ field.help_text }}</span>
+                        {{ field.errors }}
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </fieldset>
+
+    <button type="submit" class="btn-submit">Run prediction</button>
+</form>
+{% endblock %}

@@ -1,0 +1,7 @@
+Django>=6.1,<6.2
+httpx>=0.27
+
+# Optional: only needed if you set USE_MARIADB=1 (see README).
+# Requires MariaDB/MySQL dev headers to build — on Ubuntu/Debian:
+#   sudo apt install pkg-config libmariadb-dev
+# mysqlclient>=2.2

@@ -1,0 +1,32 @@
+services:
+  ml_pipeline:
+    build: ./ml_pipeline
+    container_name: water_ml_service
+    ports:
+      - "8001:8001"
+    volumes:
+      - ./ml_pipeline/models:/app/models   # keeps trained models in sync with the host
+    restart: unless-stopped
+
+  notebook:
+    build: ./notebook
+    container_name: water_notebook
+    ports:
+      - "8888:8888"
+    volumes:
+      - .:/app                              # whole repo: notebook's ../dataset and
+                                             # ../ml_pipeline paths resolve unchanged
+    working_dir: /app/notebook
+    depends_on:
+      - ml_pipeline
+
+  django_portal:
+    build: ./django_portal
+    container_name: water_django_portal
+    ports:
+      - "8000:8000"
+    environment:
+      - HAZARD_SERVICE_URL=http://ml_pipeline:8001   # container-to-container, NOT localhost
+    depends_on:
+      - ml_pipeline
+    restart: unless-stopped

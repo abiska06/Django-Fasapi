@@ -1,0 +1,41 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}Water Quality Hazard Monitor{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'monitor/css/style.css' %}">
+</head>
+<body>
+    <header class="site-header">
+        <div class="wrap header-row">
+            <a class="brand" href="{% url 'monitor:predict' %}">
+                <span class="brand-mark">&#8776;</span> Sentinel<span class="brand-thin">Flow</span>
+            </a>
+            <nav>
+                <a href="{% url 'monitor:predict' %}">New reading</a>
+                <a href="{% url 'monitor:history' %}">History</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="wrap">
+        {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                    <li class="message message-{{ message.tags }}">{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="site-footer">
+        <div class="wrap">
+            Georgia water-quality sensor network &middot; Random Forest pH regressor + Gradient Boosting hazard classifier, served over FastAPI
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,33 @@
+[2026-10-02T07:55:32.275+0000] {local_task_job_runner.py:123} INFO - ::group::Pre task execution logs
+[2026-10-02T07:55:32.307+0000] {taskinstance.py:2613} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: water_quality_training_pipeline.train_models manual__2026-10-02T07:55:28.507582+00:00 [queued]>
+[2026-10-02T07:55:32.318+0000] {taskinstance.py:2613} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: water_quality_training_pipeline.train_models manual__2026-10-02T07:55:28.507582+00:00 [queued]>
+[2026-10-02T07:55:32.319+0000] {taskinstance.py:2866} INFO - Starting attempt 1 of 1
+[2026-10-02T07:55:32.338+0000] {taskinstance.py:2889} INFO - Executing <Task(BashOperator): train_models> on 2026-10-02 07:55:28.507582+00:00
+[2026-10-02T07:55:32.354+0000] {logging_mixin.py:190} WARNING - /home/***/.local/lib/python3.12/site-packages/***/task/task_runner/standard_task_runner.py:70 DeprecationWarning: This process (pid=1538) is multi-threaded, use of fork() may lead to deadlocks in the child.
+[2026-10-02T07:55:32.355+0000] {standard_task_runner.py:72} INFO - Started process 1539 to run task
+[2026-10-02T07:55:32.356+0000] {standard_task_runner.py:104} INFO - Running: ['***', 'tasks', 'run', 'water_quality_training_pipeline', 'train_models', 'manual__2026-10-02T07:55:28.507582+00:00', '--job-id', '10', '--raw', '--subdir', 'DAGS_FOLDER/water_quality_pipeline_dag.py', '--cfg-path', '/tmp/tmpndibvq2l']
+[2026-10-02T07:55:32.360+0000] {standard_task_runner.py:105} INFO - Job 10: Subtask train_models
+[2026-10-02T07:55:32.431+0000] {task_command.py:467} INFO - Running <TaskInstance: water_quality_training_pipeline.train_models manual__2026-10-02T07:55:28.507582+00:00 [running]> on host d76a494eda1f
+[2026-10-02T07:55:32.557+0000] {taskinstance.py:3132} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='***' AIRFLOW_CTX_DAG_ID='water_quality_training_pipeline' AIRFLOW_CTX_TASK_ID='train_models' AIRFLOW_CTX_EXECUTION_DATE='2026-10-02T07:55:28.507582+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='manual__2026-10-02T07:55:28.507582+00:00'
+[2026-10-02T07:55:32.558+0000] {taskinstance.py:731} INFO - ::endgroup::
+[2026-10-02T07:55:32.585+0000] {subprocess.py:78} INFO - Tmp dir root location: /tmp
+[2026-10-02T07:55:32.586+0000] {subprocess.py:88} INFO - Running command: ['/usr/bin/bash', '-c', 'cd /opt/***/ml_pipeline && python train.py --mat-path /opt/***/dataset/water_dataset.mat']
+[2026-10-02T07:55:32.610+0000] {subprocess.py:99} INFO - Output:
+[2026-10-02T07:55:39.422+0000] {subprocess.py:106} INFO - Building dataset from raw .mat file...
+[2026-10-02T07:55:39.423+0000] {subprocess.py:106} INFO - Train rows: 15651  Test rows: 10434
+[2026-10-02T07:55:39.423+0000] {subprocess.py:106} INFO - Hazard rate — train: 4.306%  test: 5.060%
+[2026-10-02T07:55:39.423+0000] {subprocess.py:106} INFO - 
+[2026-10-02T07:55:39.423+0000] {subprocess.py:106} INFO - Training regression pipeline (pH forecast)...
+[2026-10-02T07:55:39.424+0000] {subprocess.py:106} INFO - Regression metrics (test): {'rmse': 0.01159893113943505, 'mae': 0.006611892077124659, 'r2': 0.8447633155958152}
+[2026-10-02T07:55:39.424+0000] {subprocess.py:106} INFO - 
+[2026-10-02T07:55:39.424+0000] {subprocess.py:106} INFO - Training classification pipeline (hazard flag)...
+[2026-10-02T07:55:39.424+0000] {subprocess.py:106} INFO - Classification metrics (test): {'accuracy': 0.9737396971439525, 'precision': 0.8175, 'recall': 0.6193181818181818, 'f1': 0.7047413793103449, 'roc_auc': 0.9703605941302792}
+[2026-10-02T07:55:39.425+0000] {subprocess.py:106} INFO - 
+[2026-10-02T07:55:39.425+0000] {subprocess.py:106} INFO - Saved: models/ph_regressor.joblib, models/hazard_classifier.joblib, models/metadata.json
+[2026-10-02T07:55:39.425+0000] {subprocess.py:106} INFO - Done in 4.9s
+[2026-10-02T07:55:39.718+0000] {subprocess.py:110} INFO - Command exited with return code 0
+[2026-10-02T07:55:39.761+0000] {taskinstance.py:340} INFO - ::group::Post task execution logs
+[2026-10-02T07:55:39.762+0000] {taskinstance.py:352} INFO - Marking task as SUCCESS. dag_id=water_quality_training_pipeline, task_id=train_models, run_id=manual__2026-10-02T07:55:28.507582+00:00, execution_date=20261002T075528, start_date=20261002T075532, end_date=20261002T075539
+[2026-10-02T07:55:39.814+0000] {local_task_job_runner.py:266} INFO - Task exited with return code 0
+[2026-10-02T07:55:39.839+0000] {taskinstance.py:3895} INFO - 0 downstream tasks scheduled from follow-on schedule check
+[2026-10-02T07:55:39.841+0000] {local_task_job_runner.py:245} INFO - ::endgroup::
